@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Video{
     
@@ -24,9 +25,18 @@ class Video{
             if let constSizes = sizes{
                 
                 if constSizes.count > 0 {
-                    var picture = constSizes[0]
+                    //var picture = constSizes[0]
                     
-                    self.imageURLString = picture["link"] as? String
+                    //determines screen size and finds appropriate image
+                    let screenWidth = UIScreen.mainScreen().bounds.size.width * UIScreen.mainScreen().scale
+                    let viableSizes = constSizes.filter({$0["width"] as? CGFloat >= screenWidth})
+                    if viableSizes.count > 0 {
+                        let selectedSize = viableSizes[0]
+                        self.imageURLString = selectedSize["link"] as? String
+                    } else {
+                        let selectedSize = constSizes.last! //all else fails there will be a value here
+                        self.imageURLString = selectedSize["link"] as? String
+                    }
                 }
             }
         }

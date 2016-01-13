@@ -28,16 +28,24 @@ class VideoTableViewCell: UITableViewCell {
                 
                 if let constImageURLString = video!.imageURLString{
                     let url = NSURL(string: constImageURLString)!
-                    self.task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data, response, error) -> Void in
+                    self.task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { [weak self] (data, response, error) -> Void in
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.task = nil
                             
-                            if let data = data {
-                                let image = UIImage(data: data)
-                                self.videoImage?.image = image
-                            } else {
+                            if let strongSelf = self{
                                 
+                                if constImageURLString != strongSelf.video?.imageURLString {
+                                    return
+                                }
+                                
+                                strongSelf.task = nil
+                                
+                                if let data = data {
+                                    let image = UIImage(data: data)
+                                    strongSelf.videoImage?.image = image
+                                } else {
+                                    
+                                }
                             }
                         })
                         
@@ -46,6 +54,11 @@ class VideoTableViewCell: UITableViewCell {
                 }
             }
         }
+    }
+    
+    deinit{
+        self.task?.cancel()
+        self.task = nil
     }
     
     override func prepareForReuse() {

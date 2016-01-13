@@ -68,6 +68,8 @@ class StaffPicksViewController: UIViewController, UITableViewDataSource {
             if let constVideos = videos{
                 self.items = constVideos
                 self.tableView?.reloadData()
+            } else {
+                //TODO: alert user
             }
             
             print("error: \(error)\nobject: \(videos)")

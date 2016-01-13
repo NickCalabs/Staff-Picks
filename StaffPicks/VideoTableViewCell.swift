@@ -21,7 +21,7 @@ class VideoTableViewCell: UITableViewCell {
             if let constVideo = video {
                 self.nameLabel?.text = video?.name
                 if let constDuration = video?.duration{
-                    self.durationLabel!.text = "\(constDuration)"
+                    self.durationLabel!.text = constDuration
                 } else {
                     self.durationLabel?.text = "?"
                 }
